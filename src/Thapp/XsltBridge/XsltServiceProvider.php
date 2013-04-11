@@ -103,8 +103,10 @@ class XsltServiceProvider extends ViewServiceProvider
 
                 $normalizer = new Normalizer();
                 $normalizer->setIgnoredAttributes($app['config']->get('xsltbridge::normalizer.ignoredattributes', array()));
-                $builder  = new XMLBuilder($rootname, $normalizer);
 
+                $encoding = $app['config']->get('xsltbridge::xml.encoding', 'UTF-8');
+
+                $builder  = new XMLBuilder($rootname, $normalizer);
                 // set the singularizer on the xml builder
                 $builder->setSingularizer(function ($value)
                 {
@@ -112,6 +114,7 @@ class XsltServiceProvider extends ViewServiceProvider
                 });
 
                 $builder->setAttributeMapp($app['config']->get('xsltbridge::attributes', array()));
+                $builder->setEncoding($encoding);
 
                 return new XslEngine($builder, $bridge, $globals);
             }

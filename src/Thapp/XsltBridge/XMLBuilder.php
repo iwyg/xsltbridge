@@ -65,13 +65,6 @@ class XMLBuilder
     protected $attributemap = array();
 
     /**
-     * config
-     *
-     * @var mixed
-     */
-    protected $config;
-
-    /**
      * dom
      *
      * @var \DOMDocument
@@ -92,11 +85,10 @@ class XMLBuilder
      * @access public
      * @return mixed
      */
-    public function __construct($name = 'data', Normalizer $normalizer, array $configuration = array())
+    public function __construct($name = 'data', Normalizer $normalizer)
     {
         $this->rootName   = $name;
         $this->normalizer = $normalizer;
-        $this->config     = $configuration;
     }
 
 
@@ -152,21 +144,17 @@ class XMLBuilder
      * createXML
      *
      * @access public
-     * @return string
+     * @return \DOMDocument|string
      */
     public function createXML($asstring = false)
     {
-        $this->dom = new DOMDocument();
+        $this->dom = new DOMDocument('1.0', $this->encoding);
 
         $xmlRoot = $this->rootName;
         $root = $this->dom->createElement($xmlRoot);
 
         $this->buildXML($root, $this->data);
         $this->dom->appendChild($root);
-
-        //header('Content-type: application/xml');
-        //echo $this->dom->saveXML();
-        //die;
 
         return $asstring ? $this->dom->saveXML() : $this->dom;
     }
@@ -196,7 +184,6 @@ class XMLBuilder
     {
         return $this->normalizer->normalize($name);
     }
-
 
     /**
      * buildXML
@@ -423,6 +410,40 @@ class XMLBuilder
     {
         $text = $this->dom->createTextNode($value);
         $DOMNode->appendChild($text);
+        return true;
+    }
+
+    /**
+     * createCDATASection
+     *
+     * @param DOMNode $DOMNode
+     * @param string  $value
+     * @access protected
+     * @return boolean
+     */
+    protected function createCDATASection($DOMNode, $value)
+    {
+        $cdata = $this->dom->createCDATASection($value);
+        $DOMNode->appendChild($cdata);
+        return true;
+    }
+
+    /**
+     * createTextNodeWithTypeAttribute
+     *
+     * @param DOMNode $DOMNode
+     * @param mixed   $value
+     * @param string  $type
+     * @access protected
+     * @return boolean
+     */
+    protected function createTextNodeWithTypeAttribute($DOMNode, $value, $type = 'int')
+    {
+        $text = $this->dom->createTextNode($value);
+        $attr = $this->dom->createAttribute('type');
+        $attr->value = $type;
+        $DOMNode->appendChild($text);
+        $DOMNode->appendChild($attr);
         return true;
     }
 }
