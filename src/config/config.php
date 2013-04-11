@@ -4,12 +4,8 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Service Provider Manifest
+	| File extension
 	|--------------------------------------------------------------------------
-	|
-	| The service provider manifest is used by Laravel to lazy load service
-	| providers which are not needed for each request, as well to keep a
-	| list of all of the services. Here, you may set its storage spot.
 	|
      */
 
@@ -17,18 +13,12 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Service Provider Manifest
+	| XMLTProcessor settings
 	|--------------------------------------------------------------------------
-	|
-	| The service provider manifest is used by Laravel to lazy load service
-	| providers which are not needed for each request, as well to keep a
-	| list of all of the services. Here, you may set its storage spot.
-	|
      */
 
     'xsl' => array(
         'rootname'      => 'data',
-        'optimizations' => -1,
         'phpfunctions'  => true,
         'profiling'     => true,
     ),
@@ -36,13 +26,8 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Service Provider Manifest
+	| Automatic attribute conversion
 	|--------------------------------------------------------------------------
-	|
-	| The service provider manifest is used by Laravel to lazy load service
-	| providers which are not needed for each request, as well to keep a
-	| list of all of the services. Here, you may set its storage spot.
-	|
 	*/
 
     'attributes' => array(
@@ -53,11 +38,6 @@ return array(
 	|--------------------------------------------------------------------------
 	| Normalizer Settings
 	|--------------------------------------------------------------------------
-	|
-	| 
-	| providers which are not needed for each request, as well to keep a
-	| list of all of the services. Here, you may set its storage spot.
-	|
      */
 
     'normalizer' => array(
@@ -68,11 +48,6 @@ return array(
 	|--------------------------------------------------------------------------
 	| Global Parameters
 	|--------------------------------------------------------------------------
-	|
-	| The service provider manifest is used by Laravel to lazy load service
-	| providers which are not needed for each request, as well to keep a
-	| list of all of the services. Here, you may set its storage spot.
-	|
      */
 
     'params' => array(

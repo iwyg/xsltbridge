@@ -1,9 +1,9 @@
 {
     "name": "thapp/xsltbridge",
     "description": "XSLT Templating for laravel 4",
+	"keywords": ["laravel", "xslt"],
     "require": {
-        "php": ">=5.3.6",
-		"symfony/serializer":"2.3.*"
+        "php": ">=5.3.6"
     },
     "require-dev": {
         "illuminate/foundation": "4.0.*",
