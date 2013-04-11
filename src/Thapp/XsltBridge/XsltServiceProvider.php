@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This File is part of the vendor\thapp\src\Thapp\XsltBridge package
+ * This File is part of the Thapp\XsltBridge package
  *
  * (c) Thomas Appel <mail@thomas-appel.com>
  *
