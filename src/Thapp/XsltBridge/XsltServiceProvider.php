@@ -13,26 +13,29 @@ namespace Thapp\XsltBridge;
 
 use Illuminate\View\Environment;
 use Illuminate\Support\Pluralizer;
+use Thapp\XsltBridge\Engines\XslEngine;
 use Illuminate\View\ViewServiceProvider;
 use Illuminate\View\Engines\EngineResolver;
-use Thapp\XsltBridge\Engines\XslEngine;
-
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 /**
- * @class XsltServiceProvider
+ * Class: XsltServiceProvider
+ *
+ * @uses ViewServiceProvider
+ *
+ * @package
+ * @version
+ * @author Thomas Appel <mail@thomas-appel.com>
+ * @license MIT
  */
 class XsltServiceProvider extends ViewServiceProvider
 {
 
     /**
-     * register
-     *
-     * @access public
-     * @return mixed
+     * {@inheritDoc}
      */
     public function register()
     {
@@ -43,10 +46,7 @@ class XsltServiceProvider extends ViewServiceProvider
     }
 
     /**
-     * registerXSLTEngine
-     *
-     * @access protected
-     * @return mixed
+     * {@inheritDoc}
      */
     public function registerEngineResolver()
     {
@@ -122,10 +122,7 @@ class XsltServiceProvider extends ViewServiceProvider
     }
 
     /**
-     * registerEnvironment
-     *
-     * @access public
-     * @return void
+     * {@inheritDoc}
      */
     public function registerEnvironment()
     {
