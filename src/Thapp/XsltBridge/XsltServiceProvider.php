@@ -11,6 +11,7 @@
 
 namespace Thapp\XsltBridge;
 
+use Illuminate\View\Environment;
 use Illuminate\Support\Pluralizer;
 use Illuminate\View\ViewServiceProvider;
 use Illuminate\View\Engines\EngineResolver;
@@ -68,6 +69,7 @@ class XsltServiceProvider extends ViewServiceProvider
         );
     }
 
+
     /**
      * registerXslEngine
      *
@@ -78,47 +80,45 @@ class XsltServiceProvider extends ViewServiceProvider
     public function registerXslEngine($resolver)
     {
         $app = $this->app;
-        $resolver->register(
-            'xsl',
-            function () use ($app)
-            {
-                $bridge = new XSLTBridge($app, new \XSLTProcessor, $app['events']);
 
-                if (true === $app['config']->get('xsltbridge::xsl.phpfunctions', false)) {
-                    $bridge->registerFunctions();
-                }
+        $resolver->register('xsl', function () use ($app, $resolver)
+        {
+            $bridge = new XSLTBridge($app, new \XSLTProcessor, $app['events']);
 
-                if (true === $app['config']->get('xsltbridge::xsl.profiling', false)) {
-                    $dir = app_path() . DIRECTORY_SEPARATOR . $app['config']->get('xsltbridge::xsl.profilingdir', 'profile');
-
-                    if (!is_dir($dir)) {
-                        $app['files']->makeDirectory($dir);
-                    }
-
-                    $bridge->enableProfiling($dir . '/xslt_profile.txt');
-                }
-
-                $globals  = $app['config']->get('xsltbridge::params', array());
-                $rootname = $app['config']->get('xsltbridge::xml.rootname', 'data');
-
-                $normalizer = new Normalizer();
-                $normalizer->setIgnoredAttributes($app['config']->get('xsltbridge::normalizer.ignoredattributes', array()));
-
-                $encoding = $app['config']->get('xsltbridge::xml.encoding', 'UTF-8');
-
-                $builder  = new XMLBuilder($rootname, $normalizer);
-                // set the singularizer on the xml builder
-                $builder->setSingularizer(function ($value)
-                {
-                    return Pluralizer::singular($value);
-                });
-
-                $builder->setAttributeMapp($app['config']->get('xsltbridge::attributes', array()));
-                $builder->setEncoding($encoding);
-
-                return new XslEngine($builder, $bridge, $globals);
+            if (true === $app['config']->get('xsltbridge::xsl.phpfunctions', false)) {
+                $bridge->registerFunctions();
             }
-        );
+
+            if (true === $app['config']->get('xsltbridge::xsl.profiling', false)) {
+                $dir = app_path() . DIRECTORY_SEPARATOR . $app['config']->get('xsltbridge::xsl.profilingdir', 'profile');
+
+                if (!is_dir($dir)) {
+                    $app['files']->makeDirectory($dir);
+                }
+
+                $bridge->enableProfiling($dir . '/xslt_profile.txt');
+            }
+
+            $globals  = $app['config']->get('xsltbridge::params', array());
+            $rootname = $app['config']->get('xsltbridge::xml.rootname', 'data');
+
+            $normalizer = new Normalizer();
+            $normalizer->setIgnoredAttributes($app['config']->get('xsltbridge::normalizer.ignoredattributes', array()));
+
+            $encoding = $app['config']->get('xsltbridge::xml.encoding', 'UTF-8');
+
+            $builder  = new XMLBuilder($rootname, $normalizer);
+            // set the singularizer on the xml builder
+            $builder->setSingularizer(function ($value)
+            {
+                return Pluralizer::singular($value);
+            });
+
+            $builder->setAttributeMapp($app['config']->get('xsltbridge::attributes', array()));
+            $builder->setEncoding($encoding);
+
+            return new XslEngine($builder, $bridge, $globals);
+        });
     }
 
     /**
@@ -132,9 +132,7 @@ class XsltServiceProvider extends ViewServiceProvider
         $fileExtensions = explode(',', $this->app['config']->get('xsltbridge::extension', 'xsl'));
 
         foreach ($fileExtensions as $extension) {
-
-            $this->app['view']->addExtension(trim($extension));
-
+            $this->app['view']->addExtension($extension, 'xsl');
         }
     }
 }
