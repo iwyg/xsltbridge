@@ -1,0 +1,28 @@
+{
+    "name": "thapp/xsltbridge",
+    "description": "XSLT Templating for laravel 4",
+    "require": {
+        "php": ">=5.3.6",
+		"symfony/serializer":"2.3.*"
+    },
+    "require-dev": {
+        "illuminate/foundation": "4.0.*",
+        "illuminate/filesystem": "4.0.*",
+        "illuminate/support": "4.0.*",
+		"mockery/mockery": "0.7.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Appel",
+            "email": "mail@thomas-appel.com"
+        }
+    ],
+	"autoload": {
+		"psr-0": {
+			"Thapp":"src/"		
+		},
+		"classmap": ["tests"]
+	},
+    "minimum-stability": "dev"
+}
