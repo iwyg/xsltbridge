@@ -36,4 +36,4 @@ to the `providers` array.
 
 ## Configuration
 
-`$ php artisan config:publish thapp\xsltbridge`
+`$ php artisan config:publish thapp/xsltbridge`
