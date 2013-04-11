@@ -83,7 +83,7 @@ class XsltServiceProvider extends ViewServiceProvider
 
         $resolver->register('xsl', function () use ($app, $resolver)
         {
-            $bridge = new XSLTBridge($app, new \XSLTProcessor, $app['events']);
+            $bridge = new XsltBridge($app, new \XSLTProcessor, $app['events']);
 
             if (true === $app['config']->get('xsltbridge::xsl.phpfunctions', false)) {
                 $bridge->registerFunctions();
