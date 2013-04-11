@@ -1,8 +1,8 @@
 xsltbridge
 ==========
 
-XSLTBridge for Laravel 4 views
-[![Build Status](https://api.travis-ci.org/iwyg/xsltbridge.png?branch=master)](https://travis-ci.org/iwyg/xsltbridge)
+XSLTBridge for Laravel 4 views  
+[![Build Status](https://travis-ci.org/iwyg/xsltbridge.png?branch=master)](https://travis-ci.org/iwyg/xsltbridge)
 
 
 ## Installation
