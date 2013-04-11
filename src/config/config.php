@@ -32,7 +32,7 @@ return array(
         'phpfunctions'  => true,
         'profiling'     => true,
         // directory relative to `app`
-        'profilingdir'  => 'profile'
+        'profilingdir'  => 'storage/profile'
     ),
 
 	/*
