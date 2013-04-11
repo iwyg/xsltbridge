@@ -89,11 +89,17 @@ class XsltServiceProvider extends ViewServiceProvider
                 }
 
                 if (true === $app['config']->get('xsltbridge::xsl.profiling', false)) {
-                    $bridge->enableProfiling(__DIR__. '/profile.txt');
+                    $dir = app_path() . DIRECTORY_SEPARATOR . $app['config']->get('xsltbridge::xsl.profilingdir', 'profile');
+
+                    if (!is_dir($dir)) {
+                        $app['files']->makeDirectory($dir);
+                    }
+
+                    $bridge->enableProfiling($dir . '/xslt_profile.txt');
                 }
 
                 $globals  = $app['config']->get('xsltbridge::params', array());
-                $rootname = $app['config']->get('xsltbridge::xsl.rootname', 'data');
+                $rootname = $app['config']->get('xsltbridge::xml.rootname', 'data');
 
                 $normalizer = new Normalizer();
                 $normalizer->setIgnoredAttributes($app['config']->get('xsltbridge::normalizer.ignoredattributes', array()));
@@ -116,21 +122,16 @@ class XsltServiceProvider extends ViewServiceProvider
      * registerEnvironment
      *
      * @access public
-     * @return mixed
+     * @return void
      */
     public function registerEnvironment()
     {
-        $this->app['view']->addExtension($this->app['config']->get('xsltbridge::extension', 'xsl'), 'xsl');
-    }
+        $fileExtensions = explode(',', $this->app['config']->get('xsltbridge::extension', 'xsl'));
 
-    /**
-     * registerFunctions
-     *
-     * @access protected
-     * @return mixed
-     */
-    protected function registerFunctions()
-    {
+        foreach ($fileExtensions as $extension) {
 
+            $this->app['view']->addExtension(trim($extension));
+
+        }
     }
 }

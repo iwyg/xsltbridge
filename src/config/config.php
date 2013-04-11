@@ -6,28 +6,43 @@ return array(
 	|--------------------------------------------------------------------------
 	| File extension
 	|--------------------------------------------------------------------------
-	|
+	| Comma seperated list of file extension to be registered with the xslt view.
      */
 
     'extension' => 'xsl',
 
 	/*
 	|--------------------------------------------------------------------------
-	| XMLTProcessor settings
+	| XML Conversion settings
+    |--------------------------------------------------------------------------
+     */
+
+    'xml' => array(
+        'rootname'      => 'data',
+        'encoding'      => 'UTF-8'
+    ),
+
+	/*
 	|--------------------------------------------------------------------------
+	| XSLTProcessor settings
+    |--------------------------------------------------------------------------
      */
 
     'xsl' => array(
-        'rootname'      => 'data',
         'phpfunctions'  => true,
         'profiling'     => true,
+        // directory relative to `app`
+        'profilingdir'  => 'profile'
     ),
-
 
 	/*
 	|--------------------------------------------------------------------------
 	| Automatic attribute conversion
 	|--------------------------------------------------------------------------
+    | You may declare certain array keys to be set as an xml attribute. `*` is
+    | a wildcard to match every key name. Note that key names refer to their
+    | normalized values, e.g. `foo_bar` would become `foo-bar`, `fooBar` becomes
+    | `foo-bar` etc.
 	*/
 
     'attributes' => array(
@@ -38,6 +53,8 @@ return array(
 	|--------------------------------------------------------------------------
 	| Normalizer Settings
 	|--------------------------------------------------------------------------
+    | Prevent circular references by excluding `app` and `env` in the laravel
+    | context
      */
 
     'normalizer' => array(
@@ -54,3 +71,4 @@ return array(
         'foo' => 'bar'
     )
 );
+
