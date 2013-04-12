@@ -51,24 +51,15 @@ class XsltServiceProvider extends ViewServiceProvider
     public function registerEngineResolver()
     {
         $service = $this;
-        $this->app['view.engine.resolver'] = $this->app->share(
-
-            function ($app) use ($service)
-            {
-                $resolver = new EngineResolver;
-
-                // Next we will register the various engines with the resolver so that the
-                // environment can resolve the engines it needs for various views based
-                // on the extension of view files. We call a method for each engines.
-                foreach (array('php', 'blade', 'xsl') as $engine) {
-                    $service->{'register' . ucfirst($engine) . 'Engine'}($resolver);
-                }
-
-                return $resolver;
+        $this->app['view.engine.resolver'] = $this->app->share(function ($app) use ($service)
+        {
+            $resolver = new EngineResolver;
+            foreach (array('php', 'blade', 'xsl') as $engine) {
+                $service->{'register' . ucfirst($engine) . 'Engine'}($resolver);
             }
-        );
+            return $resolver;
+        });
     }
-
 
     /**
      * registerXslEngine
@@ -83,29 +74,46 @@ class XsltServiceProvider extends ViewServiceProvider
 
         $resolver->register('xsl', function () use ($app, $resolver)
         {
+            $config = $app['config'];
+
+            $cxslt = array(
+                $config->get('xsltbridge::xsl.phpfunctions', false),
+                $config->get('xsltbridge::xsl.profiling', false),
+                $config->get('xsltbridge::xml.rootname', 'data'),
+                $config->get('xsltbridge::xml.encoding', 'UTF-8'),
+                $config->get('xsltbridge::normalizer.ignoredattributes', array()),
+                $config->get('xsltbridge::attributes', array()),
+                $config->get('xsltbridge::params', array())
+            );
+
+            list(
+                $registerFunctions,
+                $enableProfiling,
+                $rootname,
+                $encoding,
+                $ignoredAttributes,
+                $mappedAttributes,
+                $globals
+            ) = $cxslt;
+
             $bridge = new XsltBridge($app, new \XSLTProcessor, $app['events']);
 
-            if (true === $app['config']->get('xsltbridge::xsl.phpfunctions', false)) {
+            if (true === $registerFunctions) {
                 $bridge->registerFunctions();
             }
 
-            if (true === $app['config']->get('xsltbridge::xsl.profiling', false)) {
+            if (true === $enableProfiling) {
                 $dir = app_path() . DIRECTORY_SEPARATOR . $app['config']->get('xsltbridge::xsl.profilingdir', 'profile');
 
                 if (!is_dir($dir)) {
                     $app['files']->makeDirectory($dir);
                 }
 
-                $bridge->enableProfiling($dir . '/xslt_profile.txt');
+                $bridge->enableProfiling(sprintf('%s/%s_%s', $dir, microtime(true), 'xslt_profile.txt'));
             }
 
-            $globals  = $app['config']->get('xsltbridge::params', array());
-            $rootname = $app['config']->get('xsltbridge::xml.rootname', 'data');
-
             $normalizer = new Normalizer();
-            $normalizer->setIgnoredAttributes($app['config']->get('xsltbridge::normalizer.ignoredattributes', array()));
-
-            $encoding = $app['config']->get('xsltbridge::xml.encoding', 'UTF-8');
+            $normalizer->setIgnoredAttributes($ignoredAttributes);
 
             $builder  = new XMLBuilder($rootname, $normalizer);
             // set the singularizer on the xml builder
@@ -114,7 +122,7 @@ class XsltServiceProvider extends ViewServiceProvider
                 return Pluralizer::singular($value);
             });
 
-            $builder->setAttributeMapp($app['config']->get('xsltbridge::attributes', array()));
+            $builder->setAttributeMapp($mappedAttributes);
             $builder->setEncoding($encoding);
 
             return new XslEngine($builder, $bridge, $globals);
