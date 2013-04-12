@@ -181,11 +181,11 @@ class Normalizer
             $name = $this->normalize($prop);
 
             if (in_array($name, $this->ignoredAttributes)) {
-                var_dump($key);
                 continue;
             }
 
-            $out[$name] = $data->{$prop};
+            try { $out[$name] = $data->{$prop};
+            } catch (\Exception $e) {}
         }
 
         return $out;

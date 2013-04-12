@@ -156,6 +156,10 @@ class XMLBuilder
         $this->buildXML($root, $this->data);
         $this->dom->appendChild($root);
 
+        //header('Content-type: text/xml');
+        //echo $this->dom->saveXML();
+        //die;
+
         return $asstring ? $this->dom->saveXML() : $this->dom;
     }
 

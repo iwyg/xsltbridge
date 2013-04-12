@@ -46,7 +46,7 @@ return array(
 	*/
 
     'attributes' => array(
-        '*' => array('id', 'created-at')
+        '*' => array('id', 'created-at', 'updated-at', 'relation-id')
     ),
 
 	/*

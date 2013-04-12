@@ -40,7 +40,7 @@ class XsltServiceProvider extends ViewServiceProvider
     public function register()
     {
         $path = realpath(dirname(__DIR__) . '/../config');
-        $this->app['config']->package('tapp/xsltbridge', $path);
+        $this->app['config']->package('thapp/xsltbridge', $path);
         $this->registerEngineResolver();
         $this->registerEnvironment();
     }
@@ -76,25 +76,13 @@ class XsltServiceProvider extends ViewServiceProvider
         {
             $config = $app['config'];
 
-            $cxslt = array(
-                $config->get('xsltbridge::xsl.phpfunctions', false),
-                $config->get('xsltbridge::xsl.profiling', false),
-                $config->get('xsltbridge::xml.rootname', 'data'),
-                $config->get('xsltbridge::xml.encoding', 'UTF-8'),
-                $config->get('xsltbridge::normalizer.ignoredattributes', array()),
-                $config->get('xsltbridge::attributes', array()),
-                $config->get('xsltbridge::params', array())
-            );
-
-            list(
-                $registerFunctions,
-                $enableProfiling,
-                $rootname,
-                $encoding,
-                $ignoredAttributes,
-                $mappedAttributes,
-                $globals
-            ) = $cxslt;
+            $registerFunctions = $config->get('xsltbridge::xsl.phpfunctions', false);
+            $enableProfiling   = $config->get('xsltbridge::xsl.profiling', false);
+            $rootname          = $config->get('xsltbridge::xml.rootname', 'data');
+            $encoding          = $config->get('xsltbridge::xml.encoding', 'UTF-8');
+            $ignoredAttributes = $config->get('xsltbridge::normalizer.ignoredattributes', array());
+            $mappedAttributes  = $config->get('xsltbridge::attributes', array());
+            $globals           = $config->get('xsltbridge::params', array());
 
             $bridge = new XsltBridge($app, new \XSLTProcessor, $app['events']);
 
@@ -125,7 +113,14 @@ class XsltServiceProvider extends ViewServiceProvider
             $builder->setAttributeMapp($mappedAttributes);
             $builder->setEncoding($encoding);
 
-            return new XslEngine($builder, $bridge, $globals);
+            //$app->instance(__NAMESPACE__  . '\XMLBuilder', $builder);
+            //$app->instance(__NAMESPACE__  . '\XsltBridge', $bridge);
+
+            //$engine = $app->make(__NAMESPACE__ . '\Engines\XslEngine');
+
+            //var_dump($engine);
+
+            return new XslEngine($app['events'], $builder, $bridge, $globals);
         });
     }
 

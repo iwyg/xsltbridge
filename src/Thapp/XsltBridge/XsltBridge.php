@@ -160,7 +160,7 @@ class XsltBridge
     /**
      * parse
      *
-     * @param string $xml well formed xml content
+     * @param DOMDocument $xml
      * @access public
      * @return mixed
      */
