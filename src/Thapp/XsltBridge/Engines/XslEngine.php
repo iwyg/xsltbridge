@@ -45,13 +45,6 @@ class XslEngine implements EngineInterface
     protected $globalData;
 
     /**
-     * env
-     *
-     * @var mixed
-     */
-    protected $events;
-
-    /**
      * __construct
      *
      * @param XMLBuilder $builder
@@ -59,9 +52,8 @@ class XslEngine implements EngineInterface
      * @access public
      * @return void
      */
-    public function __construct(Dispatcher $events, XMLBuilder $builder, XSLTBridge $processor, array $globals = array())
+    public function __construct(XMLBuilder $builder, XSLTBridge $processor, array $globals = array())
     {
-        $this->events      = $events;
         $this->builder     = $builder;
         $this->processor   = $processor;
         $this->globalData  = $globals;
@@ -88,7 +80,7 @@ class XslEngine implements EngineInterface
      */
     public function setGlobalData(array $data = array())
     {
-        $this->globalData = array_merge_recursive($this->globalData, $data);
+        $this->globalData = array_merge($this->globalData, $data);
     }
 
     /**
@@ -115,30 +107,12 @@ class XslEngine implements EngineInterface
     {
         // File we want to load
         $file = realpath($path);
-        $filename = pathinfo($file, PATHINFO_BASENAME);
-        // We need to move the directory requested as the first search path
-        // this stops conflicts. For example, with packages
-        $path = pathinfo($file, PATHINFO_DIRNAME);
-        $paths[] = $path;
+
 
         $this->processor->loadXSL($file);
         $this->processor->setParameters($this->getGlobalData());
-        $this->dispatchBeforeResove($data);
         // Render template
         $this->builder->load($this->getData($data));
         return $this->processor->render($this->builder->createXML());
-    }
-
-    /**
-     * dispatchBeforeResove
-     *
-     * @access protected
-     * @return mixed
-     */
-    protected function dispatchBeforeResove(&$data)
-    {
-        $env = $data['__env'];
-        $this->events->fire('xsltbridge.beforeresolve', array($this, $env));
-        $data = array_merge($data, $env->getShared());
     }
 }

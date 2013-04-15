@@ -6,10 +6,11 @@
         "php": ">=5.3.6"
     },
     "require-dev": {
-        "illuminate/foundation": "4.0.*",
-        "illuminate/filesystem": "4.0.*",
+        "illuminate/events": "4.0.*",
+        "illuminate/view": "4.0.*",
         "illuminate/support": "4.0.*",
-		"mockery/mockery": "0.7.2"
+		"mockery/mockery": "0.7.2",
+        "mikey179/vfsStream": "1.1.*"
     },
     "license": "MIT",
     "authors": [
