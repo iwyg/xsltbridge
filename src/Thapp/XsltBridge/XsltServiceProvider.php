@@ -50,15 +50,7 @@ class XsltServiceProvider extends ViewServiceProvider
      */
     public function registerEngineResolver()
     {
-        $service = $this;
-        $this->app['view.engine.resolver'] = $this->app->share(function ($app) use ($service)
-        {
-            $resolver = new EngineResolver;
-            foreach (array('php', 'blade', 'xsl') as $engine) {
-                $service->{'register' . ucfirst($engine) . 'Engine'}($resolver);
-            }
-            return $resolver;
-        });
+        $this->registerXslEngine($this->app['view.engine.resolver']);
     }
 
     /**
