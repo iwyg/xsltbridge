@@ -1,26 +1,0 @@
-number               match                name      mode  Calls Tot 100us Avg
-
-    0            blog-post                                    3     11      3
-    1                    /                                    1      2      2
-    2                 data                                    1      1      1
-
-                         Total                                5     14
-
-index % time    self  children    called     name
-                0.000    0.000      3/3         data [2]
-[0]    78.57    0.000    0.000      3     blog-post [0]
------------------------------------------------
-                0.000    0.000      1/1         - [3]
-[1]    14.29    0.000    0.000      1     / [1]
-                0.000    0.000      1/1         data [2]
------------------------------------------------
-                0.000    0.000      1/1         / [1]
-[2]     7.14    0.000    0.000      1     data [2]
-                0.000    0.000      3/3         blog-post [0]
------------------------------------------------
-
-Index by function name
-[0] blog-post (/Users/malcolm/www/ta/app/views/blog.xsl:15)
-[1] / (/Users/malcolm/www/ta/app/views/master.xsl:9)
-[2] data (/Users/malcolm/www/ta/app/views/blog.xsl:9)
-
