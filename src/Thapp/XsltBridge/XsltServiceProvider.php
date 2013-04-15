@@ -41,30 +41,21 @@ class XsltServiceProvider extends ViewServiceProvider
     {
         $path = realpath(dirname(__DIR__) . '/../config');
         $this->app['config']->package('thapp/xsltbridge', $path);
-        $this->registerEngineResolver();
+        $this->registerXslEngine();
         $this->registerEnvironment();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function registerEngineResolver()
-    {
-        $this->registerXslEngine($this->app['view.engine.resolver']);
     }
 
     /**
      * register the Xsl view engine
      *
-     * @param Illuminate\View\EngineResolver $resolver
      * @access public
      * @return void
      */
-    public function registerXslEngine(EngineResolver $resolver)
+    public function registerXslEngine()
     {
         $app = $this->app;
 
-        $resolver->register('xsl', function () use ($app, $resolver)
+        $app['view']->addExtension('xsl', 'xsl', function () use ($app)
         {
             $config = $app['config'];
 
