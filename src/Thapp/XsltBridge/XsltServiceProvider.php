@@ -50,25 +50,17 @@ class XsltServiceProvider extends ViewServiceProvider
      */
     public function registerEngineResolver()
     {
-        $service = $this;
-        $this->app['view.engine.resolver'] = $this->app->share(function ($app) use ($service)
-        {
-            $resolver = new EngineResolver;
-            foreach (array('php', 'blade', 'xsl') as $engine) {
-                $service->{'register' . ucfirst($engine) . 'Engine'}($resolver);
-            }
-            return $resolver;
-        });
+        $this->registerXslEngine($this->app['view.engine.resolver']);
     }
 
     /**
-     * registerXslEngine
+     * register the Xsl view engine
      *
-     * @param mixed $resolver
+     * @param Illuminate\View\EngineResolver $resolver
      * @access public
      * @return void
      */
-    public function registerXslEngine($resolver)
+    public function registerXslEngine(EngineResolver $resolver)
     {
         $app = $this->app;
 
@@ -104,7 +96,7 @@ class XsltServiceProvider extends ViewServiceProvider
             $normalizer->setIgnoredAttributes($ignoredAttributes);
 
             $builder  = new XMLBuilder($rootname, $normalizer);
-            // set the singularizer on the xml builder
+
             $builder->setSingularizer(function ($value)
             {
                 return Pluralizer::singular($value);
@@ -112,13 +104,6 @@ class XsltServiceProvider extends ViewServiceProvider
 
             $builder->setAttributeMapp($mappedAttributes);
             $builder->setEncoding($encoding);
-
-            //$app->instance(__NAMESPACE__  . '\XMLBuilder', $builder);
-            //$app->instance(__NAMESPACE__  . '\XsltBridge', $bridge);
-
-            //$engine = $app->make(__NAMESPACE__ . '\Engines\XslEngine');
-
-            //var_dump($engine);
 
             return new XslEngine($app['events'], $builder, $bridge, $globals);
         });
@@ -134,5 +119,12 @@ class XsltServiceProvider extends ViewServiceProvider
         foreach ($fileExtensions as $extension) {
             $this->app['view']->addExtension($extension, 'xsl');
         }
+    }
+
+    /**
+     * @todo register events
+     */
+    public function boot()
+    {
     }
 }
