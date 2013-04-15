@@ -42,7 +42,6 @@ class XsltServiceProvider extends ViewServiceProvider
         $path = realpath(dirname(__DIR__) . '/../config');
         $this->app['config']->package('thapp/xsltbridge', $path);
         $this->registerXslEngine();
-        $this->registerEnvironment();
     }
 
     /**
@@ -98,18 +97,6 @@ class XsltServiceProvider extends ViewServiceProvider
 
             return new XslEngine($app['events'], $builder, $bridge, $globals);
         });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function registerEnvironment()
-    {
-        $fileExtensions = explode(',', $this->app['config']->get('xsltbridge::extension', 'xsl'));
-
-        foreach ($fileExtensions as $extension) {
-            $this->app['view']->addExtension($extension, 'xsl');
-        }
     }
 
     /**

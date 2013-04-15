@@ -6,7 +6,7 @@ return array(
 	|--------------------------------------------------------------------------
 	| File extension
 	|--------------------------------------------------------------------------
-	| Comma seperated list of file extension to be registered with the xslt view.
+	| Xslt file extension.
      */
 
     'extension' => 'xsl',
