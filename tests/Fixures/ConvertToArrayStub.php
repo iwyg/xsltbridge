@@ -60,4 +60,15 @@ class ConvertToArrayStub
         return array('attributes');
     }
 
+    public function setBar($bar)
+    {
+        $this->bar = $bar;
+    }
+
+    public function setFoo($foo)
+    {
+        $this->foo = $foo;
+    }
+
+
 }

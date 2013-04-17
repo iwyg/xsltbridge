@@ -88,6 +88,22 @@ class NormalizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function testConvertObjectToArrayIgnoreRecursion()
+    {
+        $data = array('bar' => 'bar', 'foo' => array());
+
+        $objectA = new Stubs\ConvertToArrayStub();
+
+        $foo = array($objectA);
+        $objectA->setFoo($foo);
+
+        $out = $this->normalizer->ensureArray($objectA);
+        $this->assertEquals(array(), $out['foo']);
+    }
+
+    /**
+     * @test
+     */
     public function testConvertArrayableObjectToArrayIgnoreAttributes()
     {
         $this->normalizer->setIgnoredAttributes(array('foo'));

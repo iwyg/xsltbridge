@@ -24,7 +24,7 @@ use \ReflectionProperty;
  * @author Thomas Appel <mail@thomas-appel.com>
  * @license MIT
  */
-class Normalizer
+class Normalizer implements NormalizerInterface
 {
     /**
      * objcache
@@ -45,20 +45,16 @@ class Normalizer
      * ensureArray
      *
      * @param mixed $data
-     * @param mixed $ignoreobjects
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function ensureArray($data, $ignoreobjects = false)
+    public function ensureArray($data)
     {
         $out = null;
 
         switch (true) {
             case is_array($data):
-                $out = $this->recursiveConvertArray($data, $ignoreobjects);
-                break;
-            case $ignoreobjects:
-                $out = false;
+                $out = $this->recursiveConvertArray($data);
                 break;
             case is_object($data):
                 $out = $this->convertObject($data);
@@ -77,7 +73,7 @@ class Normalizer
      * @access protected
      * @return array
      */
-    protected function recursiveConvertArray(array $data, $ignoreobjects)
+    protected function recursiveConvertArray(array $data)
     {
         $out = array();
 
@@ -91,10 +87,13 @@ class Normalizer
             if (is_scalar($value)) {
                 $attrValue = $value;
             } else {
-                $attrValue = $this->ensureArray($value, $ignoreobjects);
+                $attrValue = $this->ensureArray($value);
             }
 
-            $out[$this->normalize($key)] = $attrValue;
+            if (!is_null($attrValue)) {
+                $out[$this->normalize($key)] = $attrValue;
+            }
+
         }
         return $out;
     }
@@ -136,7 +135,7 @@ class Normalizer
      * @access protected
      * @return array
      */
-    protected function convertObject($data, $ignoreobjects = false)
+    protected function convertObject($data)
     {
         $reflection  = new ReflectionObject($data);
 
@@ -148,45 +147,49 @@ class Normalizer
         $properties    = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
 
         $out = array();
+        $hash = spl_object_hash($data);
+        $circularReference = in_array($hash, $this->objectcache);
+        $this->objectcache[] = $hash;
 
-        foreach ($methods as $method) {
+        if (!$circularReference) {
+            foreach ($methods as $method) {
 
-            if ($this->isGetMethod($method)) {
+                if ($this->isGetMethod($method)) {
 
-                $attributeName  = $this->normalize(substr($method->name, 3));
-                $attributeValue = $method->invoke($data);
+                    $attributeName  = $this->normalize(substr($method->name, 3));
+                    $attributeValue = $method->invoke($data);
 
-                if (is_callable($attributeValue) || in_array($attributeName, $this->ignoredAttributes)) {
+                    if (is_callable($attributeValue) || in_array($attributeName, $this->ignoredAttributes)) {
+                        continue;
+                    }
+
+                    if (null !== $attributeValue && !is_scalar($attributeValue)) {
+                        if (is_object($attributeValue)) {
+                            $attributeValue = $this->convertObject($attributeValue);
+                        } else {
+                            $attributeValue = $this->recursiveConvertArray($attributeValue);
+                        }
+                    }
+
+                    $out[$attributeName] = $attributeValue;
+                }
+            }
+
+            foreach ($properties as $property) {
+                $prop =  $property->getName();
+                $name = $this->normalize($prop);
+
+                if (in_array($name, $this->ignoredAttributes)) {
                     continue;
                 }
 
-                if (null !== $attributeValue && !is_scalar($attributeValue)) {
-
-                    if (!is_array($attributeValue)) {
-                        $hash = spl_object_hash($attributeValue);
-                        if (in_array($hash, $this->objectcache)) {
-                            continue;
-                        }
-                        $this->objectcache[] = $hash;
-                    }
-                    $attributeValue = $this->ensureArray($attributeValue, $ignoreobjects = false);
-                }
-
-                $out[$attributeName] = $attributeValue;
+                try { $out[$name] = $data->{$prop};
+                } catch (\Exception $e) {}
             }
+        } else {
+            return;
         }
 
-        foreach ($properties as $property) {
-            $prop =  $property->getName();
-            $name = $this->normalize($prop);
-
-            if (in_array($name, $this->ignoredAttributes)) {
-                continue;
-            }
-
-            try { $out[$name] = $data->{$prop};
-            } catch (\Exception $e) {}
-        }
 
         return $out;
     }
