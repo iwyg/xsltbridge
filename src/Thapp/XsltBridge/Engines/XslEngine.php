@@ -12,8 +12,8 @@
 namespace Thapp\XsltBridge\Engines;
 
 use \XSLTProcessor;
-use Thapp\XsltBridge\XMLBuilder;
-use Thapp\XsltBridge\XSLTBridge;
+use Thapp\XsltBridge\XmlBuilder;
+use Thapp\XsltBridge\XsltBridge;
 use Illuminate\View\Engines\EngineInterface;
 use Illuminate\View\Environment;
 use Illuminate\Events\Dispatcher;
@@ -52,7 +52,7 @@ class XslEngine implements EngineInterface
      * @access public
      * @return void
      */
-    public function __construct(XMLBuilder $builder, XSLTBridge $processor, array $globals = array())
+    public function __construct(XmlBuilder $builder, XsltBridge $processor, array $globals = array())
     {
         $this->builder     = $builder;
         $this->processor   = $processor;

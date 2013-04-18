@@ -195,7 +195,7 @@ class XMLBuilder
         $data = $this->normalizer->ensureArray($data);
 
         if (is_null($data)) {
-            return array();
+            return;
         }
 
         $isIndexedArray = ctype_digit(implode('', array_keys($data)));

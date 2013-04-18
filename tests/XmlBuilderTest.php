@@ -13,10 +13,10 @@ namespace Thapp\XsltBridge\Tests;
 
 use Mockery as m;
 use Thapp\XsltBridge\Normalizer;
-use Thapp\XsltBridge\XMLBuilder;
+use Thapp\XsltBridge\XmlBuilder;
 
 /**
- * Class: XMLBuilderTest
+ * Class: XmlBuilderTest
  *
  * @uses \PHPUnit_Framework_TestCase
  *
@@ -25,7 +25,7 @@ use Thapp\XsltBridge\XMLBuilder;
  * @author Thomas Appel <mail@thomas-appel.com>
  * @license MIT
  */
-class XMLBuilderTest extends \PHPUnit_Framework_TestCase
+class XmlBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * setUp
@@ -36,7 +36,7 @@ class XMLBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $normalizer = new Normalizer;
-        $this->builder = new XMLBuilder('data', $normalizer);
+        $this->builder = new XmlBuilder('data', $normalizer);
     }
 
     /**
@@ -74,6 +74,16 @@ class XMLBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder->setAttributeMapp(array('data' => array('foo')));
         $xml  = $this->builder->createXML(true);
 
+        $this->assertXmlStringEqualsXmlString($str, $xml);
+    }
+
+    /**
+     * @test
+     */
+    public function testBuildXMLSetNullData()
+    {
+        $str  = '<data/>';
+        $xml  = $this->builder->createXML(true);
         $this->assertXmlStringEqualsXmlString($str, $xml);
     }
 

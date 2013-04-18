@@ -16,10 +16,6 @@ use Illuminate\Support\Pluralizer;
 use Thapp\XsltBridge\Engines\XslEngine;
 use Illuminate\View\ViewServiceProvider;
 use Illuminate\View\Engines\EngineResolver;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 /**
  * Class: XsltServiceProvider
@@ -85,7 +81,7 @@ class XsltServiceProvider extends ViewServiceProvider
             $normalizer = new Normalizer();
             $normalizer->setIgnoredAttributes($ignoredAttributes);
 
-            $builder  = new XMLBuilder($rootname, $normalizer);
+            $builder  = new XmlBuilder($rootname, $normalizer);
 
             $builder->setSingularizer(function ($value)
             {
