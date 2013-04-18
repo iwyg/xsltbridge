@@ -29,10 +29,9 @@ class Normalizer implements NormalizerInterface
     /**
      * objcache
      *
-     * @var mixed
+     * @var array
      */
     protected $objectcache = array();
-
 
     /**
      * ignoredAttributes
@@ -97,6 +96,7 @@ class Normalizer implements NormalizerInterface
         }
         return $out;
     }
+
     /**
      * ensureTraversable
      *
@@ -126,7 +126,6 @@ class Normalizer implements NormalizerInterface
     {
         return $reflection->implementsInterface('Illuminate\Support\Contracts\ArrayableInterface');
     }
-
 
     /**
      * convertObject
@@ -189,7 +188,6 @@ class Normalizer implements NormalizerInterface
         } else {
             return;
         }
-
 
         return $out;
     }
