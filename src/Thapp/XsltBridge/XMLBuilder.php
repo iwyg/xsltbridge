@@ -14,7 +14,6 @@ namespace Thapp\XsltBridge;
 use \Closure;
 use \DOMNode;
 use \DOMDocument;
-use Thapp\XsltBridge\Normalizer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -60,7 +59,7 @@ class XMLBuilder
     /**
      * attributemap
      *
-     * @var mixed
+     * @var array
      */
     protected $attributemap = array();
 
@@ -72,9 +71,9 @@ class XMLBuilder
     protected $dom;
 
     /**
-     * dom
+     * encoding
      *
-     * @var mixed
+     * @var string
      */
     protected $encoding = 'UTF-8';
 
@@ -83,21 +82,19 @@ class XMLBuilder
      *
      * @param array $configuration
      * @access public
-     * @return mixed
      */
-    public function __construct($name = 'data', Normalizer $normalizer)
+    public function __construct($name = 'data', NormalizerInterface $normalizer)
     {
         $this->rootName   = $name;
         $this->normalizer = $normalizer;
     }
-
 
     /**
      * setEncoding
      *
      * @param mixed $encoding
      * @access public
-     * @return mixed
+     * @return void
      */
     public function setEncoding($encoding)
     {
@@ -109,7 +106,7 @@ class XMLBuilder
      *
      * @param mixed $name
      * @access public
-     * @return mixed
+     * @return void
      */
     public function setRootname($name)
     {
@@ -133,7 +130,7 @@ class XMLBuilder
      *
      * @param mixed $data
      * @access public
-     * @return mixed
+     * @return void
      */
     public function load($data)
     {
@@ -155,10 +152,6 @@ class XMLBuilder
 
         $this->buildXML($root, $this->data);
         $this->dom->appendChild($root);
-
-        //header('Content-type: text/xml');
-        //echo $this->dom->saveXML();
-        //die;
 
         return $asstring ? $this->dom->saveXML() : $this->dom;
     }
@@ -330,7 +323,6 @@ class XMLBuilder
 
         return in_array($key, $map);
     }
-
 
     /**
      * setElementValue
