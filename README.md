@@ -13,13 +13,7 @@ Add thapp\xsltbridge as a requirement to composer.json:
 {
     "require": {
         "thapp/xsltbridge": "0.1.*"
-    },
-    "repositories": [
-        {
-        "type":"vcs",
-        "url":"https://github.com/iwyg/xsltbridge"
-        }
-    ]
+    }
 }
 ```
 
