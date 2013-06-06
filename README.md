@@ -12,7 +12,7 @@ Add thapp\xsltbridge as a requirement to composer.json:
 ```json
 {
     "require": {
-        "thapp/xsltbridge": "dev-master"
+        "thapp/xsltbridge": "0.1.*"
     },
     "repositories": [
         {
