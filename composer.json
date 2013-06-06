@@ -1,17 +1,24 @@
 {
     "name": "thapp/xsltbridge",
     "description": "XSLT Templating for laravel 4",
-	"keywords": ["laravel", "xslt"],
+    "keywords": ["laravel", "xslt"],
     "require": {
-        "php": ">=5.3.6"
+        "php": ">=5.3.6",
+        "thapp/xmlbuilder": "0.1.*"
     },
     "require-dev": {
         "illuminate/events": "4.0.*",
         "illuminate/view": "4.0.*",
         "illuminate/support": "4.0.*",
-		"mockery/mockery": "0.7.2",
+        "mockery/mockery": "0.7.2",
         "mikey179/vfsStream": "1.1.*"
     },
+    "repositories": [
+        {
+            "type":"vcs",
+            "url":"https://github.com/iwyg/xmlbuilder.git"
+        }
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -19,11 +26,11 @@
             "email": "mail@thomas-appel.com"
         }
     ],
-	"autoload": {
-		"psr-0": {
-			"Thapp":"src/"		
-		},
-		"classmap": ["tests"]
-	},
+    "autoload": {
+        "psr-0": {
+            "Thapp":"src/"
+        },
+        "classmap": ["tests"]
+    },
     "minimum-stability": "dev"
 }

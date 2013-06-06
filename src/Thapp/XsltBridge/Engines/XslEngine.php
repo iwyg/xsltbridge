@@ -12,7 +12,7 @@
 namespace Thapp\XsltBridge\Engines;
 
 use \XSLTProcessor;
-use Thapp\XsltBridge\XmlBuilder;
+use Thapp\XmlBuilder\XmlBuilder;
 use Thapp\XsltBridge\XsltBridge;
 use Illuminate\View\Engines\EngineInterface;
 use Illuminate\View\Environment;

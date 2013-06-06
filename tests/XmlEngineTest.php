@@ -13,7 +13,7 @@ namespace Thapp\XsltBridge\Tests;
 
 use Mockery as m;
 use org\bovigo\vfs\VfsStream;
-use Thapp\XsltBridge\XMLBuilder;
+use Thapp\XmlBuilder\XMLBuilder;
 use Thapp\XsltBridge\XsltBridge;
 use Illuminate\Events\Dispatcher;
 use Thapp\XsltBridge\Engines\XslEngine;
@@ -97,7 +97,7 @@ class XmlEngineTest extends \PHPUnit_Framework_TestCase
             $app = m::mock('alias:Illuminate\Foundation\Application');
         } catch (\Exception $e) {}
 
-        $builder   = m::mock('Thapp\XsltBridge\XmlBuilder');
+        $builder   = m::mock('Thapp\XmlBuilder\XmlBuilder');
 
         $builder->shouldReceive('load')->atMost(1);
         $builder->shouldReceive('createXML')->andReturn($xml);
