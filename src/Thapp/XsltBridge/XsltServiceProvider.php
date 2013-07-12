@@ -97,8 +97,10 @@ class XsltServiceProvider extends ViewServiceProvider
 
     /**
      * @todo register events
+     * register the package
      */
     public function boot()
     {
+        $this->package('thapp/xsltbridge');
     }
 }
