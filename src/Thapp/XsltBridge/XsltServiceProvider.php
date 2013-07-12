@@ -13,6 +13,8 @@ namespace Thapp\XsltBridge;
 
 use Illuminate\View\Environment;
 use Illuminate\Support\Pluralizer;
+use Thapp\XmlBuilder\XmlBuilder;
+use Thapp\XmlBuilder\Normalizer;
 use Thapp\XsltBridge\Engines\XslEngine;
 use Illuminate\View\ViewServiceProvider;
 use Illuminate\View\Engines\EngineResolver;
