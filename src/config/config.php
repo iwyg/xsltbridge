@@ -68,7 +68,6 @@ return array(
      */
 
     'params' => array(
-        'foo' => 'bar'
     )
 );
 
