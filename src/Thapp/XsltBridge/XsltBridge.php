@@ -131,7 +131,6 @@ class XsltBridge
         return $this->processor->setProfiling($file);
     }
 
-
     /**
      * registerFunction
      *
@@ -166,7 +165,13 @@ class XsltBridge
      */
     public function render(DOMDocument $xml)
     {
+        $this->event->fire('xsltbridge.beforetransform', array($xml));
+
         $this->processor->importStyleSheet($this->xsl);
-        return $this->processor->transformToXML($xml);
+        $rendered = $this->processor->transformToXML($xml);
+
+        $this->event->fire('xsltbridge.aftertransform', array(&$rendered));
+
+        return $rendered;
     }
 }

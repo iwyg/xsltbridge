@@ -113,6 +113,7 @@ class XslEngine implements EngineInterface
         $this->processor->setParameters($this->getGlobalData());
         // Render template
         $this->builder->load($this->getData($data));
-        return $this->processor->render($this->builder->createXML());
+        $rendered = $this->processor->render($xml = $this->builder->createXML());
+        return $rendered;
     }
 }
