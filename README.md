@@ -32,3 +32,17 @@ to the `providers` array.
 ## Configuration
 
 `$ php artisan config:publish thapp/xsltbridge`
+
+## Working with data
+
+### Adding parameters
+
+A convenient way of adding xslt parameters is to listen to the `xsltbridge.addparameters` event.  
+Parametes will be also reflected within the `<data><param/></data>` node; 
+
+```php
+Event::listen('xsltbridge.addparameters', function ($engine) 
+{
+	$engine->addGlobalData(array('parameter' => 'value');
+});
+```

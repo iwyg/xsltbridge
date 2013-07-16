@@ -38,11 +38,32 @@ class XslEngine implements EngineInterface
     protected $builder;
 
     /**
+     * paramsSet
+     *
+     * @var mixed
+     */
+    protected $paramsSet = false;
+
+    /**
      * globalData
      *
      * @var mixed
      */
     protected $globalData;
+
+    /**
+     * data
+     *
+     * @var mixed
+     */
+    protected $data = array();
+
+    /**
+     * eventDispatcher
+     *
+     * @var mixed
+     */
+    protected $eventDispatcher;
 
     /**
      * __construct
@@ -78,7 +99,7 @@ class XslEngine implements EngineInterface
      * @access public
      * @return mixed
      */
-    public function setGlobalData(array $data = array())
+    public function addGlobalData(array $data = array())
     {
         $this->globalData = array_merge($this->globalData, $data);
     }
@@ -96,6 +117,18 @@ class XslEngine implements EngineInterface
     }
 
     /**
+     * setEventDispatcher
+     *
+     * @param mixed $dispatcher
+     * @access public
+     * @return mixed
+     */
+    public function setEventDispatcher(Dispatcher $dispatcher)
+    {
+        return $this->eventDispatcher = $dispatcher;
+    }
+
+    /**
      * get
      *
      * @param mixed $path
@@ -108,12 +141,17 @@ class XslEngine implements EngineInterface
         // File we want to load
         $file = realpath($path);
 
-
         $this->processor->loadXSL($file);
-        $this->processor->setParameters($this->getGlobalData());
+
+        if (!$this->paramsSet) {
+            $this->processor->setParameters($this->getGlobalData());
+            $this->builder->load($this->getData($data));
+            $this->paramsSet = true;
+        } else {
+            $this->builder->load($data);
+        }
+
         // Render template
-        $this->builder->load($this->getData($data));
-        $rendered = $this->processor->render($xml = $this->builder->createXML());
-        return $rendered;
+        return $this->processor->render($xml = $this->builder->createXML());
     }
 }

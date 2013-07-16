@@ -4,7 +4,7 @@
     "keywords": ["laravel", "xslt"],
     "require": {
         "php": ">=5.3.6",
-        "thapp/xmlbuilder": "0.1.*"
+        "thapp/xmlbuilder": "dev-master"
     },
     "require-dev": {
         "illuminate/events": "4.0.*",

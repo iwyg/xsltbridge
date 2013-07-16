@@ -92,7 +92,12 @@ class XsltServiceProvider extends ViewServiceProvider
             $builder->setAttributeMapp($mappedAttributes);
             $builder->setEncoding($encoding);
 
-            return new XslEngine($builder, $bridge, $globals);
+            $engine = new XslEngine($builder, $bridge, $globals);
+            $engine->setEventDispatcher($app['events']);
+
+            $app['events']->fire('xsltbridge.addparameters', array($engine));
+
+            return $engine;
         });
     }
 

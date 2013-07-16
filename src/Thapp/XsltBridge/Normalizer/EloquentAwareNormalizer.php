@@ -26,21 +26,6 @@ use Illuminate\Support\Contracts\ArrayableInterface;
  */
 class EloquentAwareNormalizer extends Normalizer
 {
-    /**
-     * replaceable
-     *
-     * @var array
-     */
-    protected static $replaceable = array(
-        '_', ':', '#', '+', '.'
-    );
-
-    /**
-     * ctypeupper
-     *
-     * @var array
-     */
-    protected static $ctypeupper = array();
 
     /**
      * check for arrayable interface
@@ -57,40 +42,15 @@ class EloquentAwareNormalizer extends Normalizer
     }
 
     /**
-     * normalize
+     * isArrayAble
      *
-     * @param mixed $value
-     * @access public
-     * @return mixed
-     */
-//    public function normalize($value)
-//    {
-//        //$value = $this->isAllUpperCase($value) ?
-//            //strtolower(trim($value, '_-#$%')) :
-//            //snake_case(trim($value, '_-#$%'));
-//
-//        return strtolower(str_replace(array('_', ':', '#', '+', '.'), '-', trim($value, '_-#$%')));
-//    }
-
-    private function isAllUpperCase($str)
-    {
-        $str = preg_replace('/[^a-zA-Z0-9]/', null, $str);
-        return ctype_upper($str);
-    }
-
-    /**
-     * convertObject
-     *
-     * @param mixed $data
+     * @param  mixed $reflection a reflection object
      * @access protected
-     * @return mixed
+     * @return boolean
      */
-    protected function convertObject($data)
+    protected function isArrayable($data)
     {
-        if ($this->isArrayableInterface($data)) {
-            return $data->toArray();
-        }
-        return parent::convertObject($data);
+        return $data->implementsInterface('Illuminate\Support\Contracts\ArrayableInterface');
     }
 
     /**
