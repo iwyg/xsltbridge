@@ -64,9 +64,9 @@ class XmlEngineTest extends \PHPUnit_Framework_TestCase
     {
         $engine = call_user_func_array(array($this, 'createEngine'), func_get_args());
         $this->assertEquals($globalData, $engine->getGlobalData());
-        $engine->setGlobalData(array('foo' => 'baz'));
+        $engine->addGlobalData(array('foo' => 'baz'));
         $this->assertEquals(array('foo' => 'baz'), $engine->getGlobalData());
-        $engine->setGlobalData(array('bar' => 'foo'));
+        $engine->addGlobalData(array('bar' => 'foo'));
         $this->assertEquals(array('foo' => 'baz', 'bar' => 'foo'), $engine->getGlobalData());
     }
 
